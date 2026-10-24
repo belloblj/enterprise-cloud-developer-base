@@ -1,0 +1,22 @@
+# Start LocalStack
+lstk start
+# Run Environment Bootstrap
+./scripts/t0_bootstrap_environment.sh
+
+# Provision IAM role
+bash scripts/t1_provision_coupons_lambda_role.sh
+
+# Provision Lambda
+bash scripts/t1_provision_coupons_list_lambda.sh
+
+# Provision API Gateway
+bash scripts/t1_provision_coupons_endpoint.sh
+
+# Test API
+curl http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons_poc
+
+# Run unit test
+npx jest tests/unit_test.js
+
+# Run Newman test
+npx newman run newman_tests/coupons_newman.json --env-var api_id=$(cat api_id.txt)

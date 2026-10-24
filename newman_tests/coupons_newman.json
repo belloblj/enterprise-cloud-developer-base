@@ -1,0 +1,42 @@
+{
+  "info": {
+    "name": "Coupons API Test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET Coupons Endpoint",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons_poc",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons_poc"
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returns the working message', () => pm.expect(pm.response.json().message).to.eql('Coupons API is working successfully'));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

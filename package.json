@@ -1,0 +1,34 @@
+{
+  "name": "enterprise-cloud-developer-base",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest tests/unit_test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/belloblj/enterprise-cloud-developer-base.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/belloblj/enterprise-cloud-developer-base/issues"
+  },
+  "homepage": "https://github.com/belloblj/enterprise-cloud-developer-base#readme",
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "newman": "^6.2.2"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/tests/**/*.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/lambda/"
+    ]
+  }
+}

@@ -1,8 +1,6 @@
-exports.handler =  async function(event, context) {
+exports.handler = async () => {
   return {
     statusCode: 200,
-    body: JSON.stringify({
-      status: 'success'
-    })
+    body: JSON.stringify({ message: "Coupons API is working successfully" })
   };
-}
+};
