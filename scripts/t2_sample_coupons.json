@@ -1,0 +1,103 @@
+{
+  "coupons": [
+    {
+      "PutRequest": {
+        "Item": {
+          "coupon_id": {
+            "S": "319326de971100158f6fa0daeec978fba1f17e4b"
+          },
+          "title": {
+            "S": "Save 20% on Fairmont hotels"
+          },
+          "description": {
+            "S": "Save 20% on Fairmont hotels when you book your stay through December 2022"
+          },
+          "coupon_code": {
+            "S": "SAVE20"
+          },
+          "campaign_id": {
+            "S": "CHRISTMAS2022"
+          },
+          "provider_id": {
+            "S": "FAIRMONT"
+          },
+          "provider_name": {
+            "S": "Fairmont Hotels and Resorts"
+          },
+          "start_date": {
+            "S": "1669852800"
+          },
+          "end_date": {
+            "S": "1672444800"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "coupon_id": {
+            "S": "502a81d1564cf66c66e429d9e7c571f872151d2d"
+          },
+          "title": {
+            "S": "Save 25% when booking 10 or more days in Super 8 hotels"
+          },
+          "description": {
+            "S": "Save 25% on Super 8 hotels when you stay 10 or more days from December 1st, 2022 until January 31st, 2023"
+          },
+          "coupon_code": {
+            "S": "STAY10PLUS"
+          },
+          "campaign_id": {
+            "S": "S8STAY10"
+          },
+          "provider_id": {
+            "S": "SUPER8"
+          },
+          "provider_name": {
+            "S": "Super 8"
+          },
+          "start_date": {
+            "S": "1669852800"
+          },
+          "end_date": {
+            "S": "1675123200"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "coupon_id": {
+            "S": "3f656e5fad7aa840efa7ab8c40118f011b9b9b5b"
+          },
+          "title": {
+            "S": "Save 10% on Hyatt hotels"
+          },
+          "description": {
+            "S": "Save 10% on Hyatt hotels worldwide when you book two or more stays in different countries through 2023"
+          },
+          "coupon_code": {
+            "S": "TRAVEL10"
+          },
+          "campaign_id": {
+            "S": "DISCOVER"
+          },
+          "provider_id": {
+            "S": "Hyatt"
+          },
+          "provider_name": {
+            "S": "Global Hyatt"
+          },
+          "start_date": {
+            "S": "1672531200"
+          },
+          "end_date": {
+            "S": "1703980800"
+          }
+        }
+      }
+    }
+  ]
+}

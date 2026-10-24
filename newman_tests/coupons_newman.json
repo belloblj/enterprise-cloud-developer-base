@@ -37,6 +37,250 @@
           }
         }
       ]
+    },
+    {
+      "name": "GET Coupon by id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returns the requested coupon', () => {",
+              "  const coupon = pm.response.json();",
+              "  pm.expect(coupon.coupon_id).to.eql('319326de971100158f6fa0daeec978fba1f17e4b');",
+              "  pm.expect(coupon).to.include.keys('title', 'description', 'coupon_code', 'campaign_id', 'provider_id', 'provider_name', 'start_date', 'end_date');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/319326de971100158f6fa0daeec978fba1f17e4b",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "319326de971100158f6fa0daeec978fba1f17e4b"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Coupon by id - not found",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/does-not-exist",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "does-not-exist"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT Update coupon",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returns the updated coupon', () => {",
+              "  const coupon = pm.response.json();",
+              "  pm.expect(coupon.title).to.eql('Save 25% on Fairmont hotels');",
+              "  pm.expect(coupon.coupon_code).to.eql('SAVE25');",
+              "  pm.expect(coupon.provider_id).to.eql('FAIRMONT');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/319326de971100158f6fa0daeec978fba1f17e4b",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "319326de971100158f6fa0daeec978fba1f17e4b"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Save 25% on Fairmont hotels\",\n  \"coupon_code\": \"SAVE25\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Coupon by id - update was saved",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Shows the updated coupon code', () => pm.expect(pm.response.json().coupon_code).to.eql('SAVE25'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/319326de971100158f6fa0daeec978fba1f17e4b",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "319326de971100158f6fa0daeec978fba1f17e4b"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT Restore coupon",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Coupon is back to the original', () => pm.expect(pm.response.json().coupon_code).to.eql('SAVE20'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/319326de971100158f6fa0daeec978fba1f17e4b",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "319326de971100158f6fa0daeec978fba1f17e4b"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Save 20% on Fairmont hotels\",\n  \"coupon_code\": \"SAVE20\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT Update coupon - not found",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/does-not-exist",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "does-not-exist"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"x\"\n}"
+        }
+      },
+      "response": []
     }
   ]
 }

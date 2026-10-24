@@ -1,0 +1,74 @@
+{
+    "Table": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "coupon_id",
+                "AttributeType": "S"
+            },
+            {
+                "AttributeName": "provider_id",
+                "AttributeType": "S"
+            },
+            {
+                "AttributeName": "campaign_id",
+                "AttributeType": "S"
+            }
+        ],
+        "TableName": "coupons",
+        "KeySchema": [
+            {
+                "AttributeName": "coupon_id",
+                "KeyType": "HASH"
+            }
+        ],
+        "TableStatus": "ACTIVE",
+        "CreationDateTime": "2026-10-23T20:47:51-07:00",
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 25,
+            "WriteCapacityUnits": 10
+        },
+        "TableSizeBytes": 1278,
+        "ItemCount": 3,
+        "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/coupons",
+        "TableId": "76e3c8fd-1bfe-410a-8b68-972991d90288",
+        "GlobalSecondaryIndexes": [
+            {
+                "IndexName": "provider_id-campaign_id-index",
+                "KeySchema": [
+                    {
+                        "AttributeName": "provider_id",
+                        "KeyType": "HASH"
+                    },
+                    {
+                        "AttributeName": "campaign_id",
+                        "KeyType": "RANGE"
+                    }
+                ],
+                "Projection": {
+                    "ProjectionType": "ALL"
+                },
+                "IndexStatus": "ACTIVE",
+                "ProvisionedThroughput": {
+                    "NumberOfDecreasesToday": 0,
+                    "ReadCapacityUnits": 25,
+                    "WriteCapacityUnits": 10
+                },
+                "IndexSizeBytes": 0,
+                "ItemCount": 0,
+                "IndexArn": "arn:aws:dynamodb:us-east-1:000000000000:table/coupons/index/provider_id-campaign_id-index",
+                "WarmThroughput": {
+                    "ReadUnitsPerSecond": 25,
+                    "WriteUnitsPerSecond": 10,
+                    "Status": "ACTIVE"
+                }
+            }
+        ],
+        "DeletionProtectionEnabled": false,
+        "WarmThroughput": {
+            "ReadUnitsPerSecond": 25,
+            "WriteUnitsPerSecond": 10,
+            "Status": "ACTIVE"
+        }
+    }
+}

@@ -20,3 +20,37 @@ npx jest tests/unit_test.js
 
 # Run Newman test
 npx newman run newman_tests/coupons_newman.json --env-var api_id=$(cat api_id.txt)
+
+# ================================================================
+# PART 2 - INTEGRATE DATA STORAGE (LocalStack, not a real AWS account)
+# Run from the project root, after Part 1 and the bootstrap script.
+# ================================================================
+
+# Create the coupons table (25 RCU / 10 WCU) and load the sample coupons
+bash scripts/t2_create_dynamodb_table.sh
+
+# Package and deploy the new coupons_get_by_id code
+bash scripts/t2_update_coupons_get_by_id_lambda.sh
+
+# Package and deploy the new coupons_update code (creates it if missing)
+bash scripts/t2_update_coupons_update_lambda.sh
+
+# Add GET and PUT /coupons/{id} to the API and redeploy the dev stage
+bash scripts/t2_provision_coupons_by_id_endpoint.sh
+
+# Add the provider_id + campaign_id index to the table
+bash scripts/t2_add_index_to_dynamodb_table.sh
+
+# Test the API
+curl http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons/319326de971100158f6fa0daeec978fba1f17e4b
+
+curl -X PUT -H "Content-Type: application/json" \
+  -d '{"coupon_code": "SAVE25"}' \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons/319326de971100158f6fa0daeec978fba1f17e4b
+
+# Run unit tests (DynamoDB is mocked)
+cd lambda/coupons_get_by_id && npm install && npx jest && cd ../..
+cd lambda/coupons_update && npm install && npx jest && cd ../..
+
+# Run Newman tests
+npx newman run newman_tests/coupons_newman.json --env-var api_id=$(cat api_id.txt)
