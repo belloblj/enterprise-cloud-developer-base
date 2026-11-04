@@ -54,3 +54,48 @@ cd lambda/coupons_update && npm install && npx jest && cd ../..
 
 # Run Newman tests
 npx newman run newman_tests/coupons_newman.json --env-var api_id=$(cat api_id.txt)
+
+# ================================================================
+# PART 3 - SECURE THE API (LocalStack, not a real AWS account)
+# Run from the project root, after Parts 1 and 2.
+# The users table (made by t0_bootstrap_environment.sh) holds tester1 and
+# tester2 with bcrypt (12 rounds) password hashes.
+# ================================================================
+
+# Package and deploy coupons_get_token (checks the password, returns a JWT)
+bash scripts/t3_update_coupons_get_token_lambda.sh
+
+# Package and deploy coupons_to_secure (validates the JWT)
+bash scripts/t3_update_coupons_to_secure_lambda.sh
+
+# Add POST /token and GET /coupons/to_secure to the API and redeploy the dev stage
+bash scripts/t3_provision_token_endpoints.sh
+
+# Get a token (200, returns token and expiresIn)
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"username": "tester1", "password": "Pc4RM0AMKy5aSGfD"}' \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/token
+
+# Wrong password (403)
+curl -i -X POST -H "Content-Type: application/json" \
+  -d '{"username": "tester1", "password": "wrong"}' \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/token
+
+# Save a token, then call the secured endpoint with it (200)
+TOKEN=$(curl -s -X POST -H "Content-Type: application/json" \
+  -d '{"username": "tester1", "password": "Pc4RM0AMKy5aSGfD"}' \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/token | node -pe "JSON.parse(require('fs').readFileSync(0)).token")
+curl -H "Authorization: Bearer $TOKEN" \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons/to_secure
+
+# No token, and a bad token (both 403)
+curl -i http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons/to_secure
+curl -i -H "Authorization: Bearer not.a.validtoken" \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons/to_secure
+
+# Run unit tests
+cd lambda/coupons_get_token && npm install && npx jest && cd ../..
+cd lambda/coupons_to_secure && npm install && npx jest && cd ../..
+
+# Run Newman tests (Parts 1, 2 and 3)
+npx newman run newman_tests/coupons_newman.json --env-var api_id=$(cat api_id.txt)

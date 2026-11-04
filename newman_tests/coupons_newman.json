@@ -281,6 +281,299 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "POST Token - valid credentials",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returns a token and expiresIn', () => {",
+              "  const body = pm.response.json();",
+              "  pm.expect(body.token).to.be.a('string');",
+              "  pm.expect(body.token.split('.')).to.have.lengthOf(3);",
+              "  pm.expect(body.expiresIn).to.eql(3600);",
+              "  pm.collectionVariables.set('token', body.token);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/token",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "token"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"tester1\",\n  \"password\": \"Pc4RM0AMKy5aSGfD\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Token - second user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/token",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "token"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"tester2\",\n  \"password\": \"4LWs6xnc1t32BzXA\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Token - wrong password returns 403",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 403', () => pm.response.to.have.status(403));",
+              "pm.test('No token returned', () => pm.expect(pm.response.json().token).to.be.undefined);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/token",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "token"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"tester1\",\n  \"password\": \"wrong-password\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Token - unknown user returns 403",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 403', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/token",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "token"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"nobody\",\n  \"password\": \"Pc4RM0AMKy5aSGfD\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET To secure - valid token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Access granted to tester1', () => {",
+              "  const body = pm.response.json();",
+              "  pm.expect(body.status).to.eql('success');",
+              "  pm.expect(body.username).to.eql('tester1');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/to_secure",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "to_secure"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET To secure - no token returns 403",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 403', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/to_secure",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "to_secure"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET To secure - invalid token returns 403",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 403', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer not.a.validtoken"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/to_secure",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "to_secure"
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }

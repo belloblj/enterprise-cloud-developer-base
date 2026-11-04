@@ -38,16 +38,18 @@ lstk aws dynamodb create-table \
   --endpoint-url $API_BASE_URL \
   --region $REGION || echo "Table already exists, continuing..."
 
-echo "Adding sample users"
+echo "Adding sample users (passwords stored as bcrypt hashes, 12 rounds)"
+# tester1 plain text: Pc4RM0AMKy5aSGfD
+# tester2 plain text: 4LWs6xnc1t32BzXA
 lstk aws dynamodb put-item \
   --table-name users \
-  --item "{\"username\": {\"S\": \"user1\"}, \"password\": {\"S\": \"Pc4RM0AMKy5aSGfD\"}}" \
+  --item '{"username": {"S": "tester1"}, "password": {"S": "$2a$12$wCqYSCDDoHdlUCI7rBBHO..c4KleiSzZqH8NXMHdLIcLsVxFmvG7C"}}' \
   --endpoint-url $API_BASE_URL \
   --region $REGION
 
 lstk aws dynamodb put-item \
   --table-name users \
-  --item "{\"username\": {\"S\": \"user2\"}, \"password\": {\"S\": \"4LWs6xnc1t32BzXA\"}}" \
+  --item '{"username": {"S": "tester2"}, "password": {"S": "$2a$12$KWfAWTZM9npRke3tWZcoE.f1fD6jNTfYwYeZv4A7WTBOl1PCYxlnW"}}' \
   --endpoint-url $API_BASE_URL \
   --region $REGION
 

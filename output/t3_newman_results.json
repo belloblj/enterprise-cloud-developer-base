@@ -1,0 +1,5362 @@
+{
+  "collection": {
+    "item": [
+      {
+        "id": "67bd0941-ebe6-4338-ae09-8a01cb4f33fc",
+        "name": "GET Coupons Endpoint",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons_poc"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "94e12ad0-db25-4cf7-b6d4-236bbd60a428",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                "pm.test('Returns the working message', () => pm.expect(pm.response.json().message).to.eql('Coupons API is working successfully'));"
+              ],
+              "_lastExecutionId": "d30088af-c207-493f-b285-30dadb0a716d"
+            }
+          }
+        ]
+      },
+      {
+        "id": "61222530-822f-4091-91f0-7c15e01f9005",
+        "name": "GET Coupon by id",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "319326de971100158f6fa0daeec978fba1f17e4b"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "645d09f8-9db4-4aac-b6d1-55e709cc492f",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                "pm.test('Returns the requested coupon', () => {",
+                "  const coupon = pm.response.json();",
+                "  pm.expect(coupon.coupon_id).to.eql('319326de971100158f6fa0daeec978fba1f17e4b');",
+                "  pm.expect(coupon).to.include.keys('title', 'description', 'coupon_code', 'campaign_id', 'provider_id', 'provider_name', 'start_date', 'end_date');",
+                "});"
+              ],
+              "_lastExecutionId": "21d438aa-4a8d-4ba0-92d4-bb24f44c6a54"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ad3db434-e746-43b2-ae3c-74786d90700e",
+        "name": "GET Coupon by id - not found",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "does-not-exist"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "a4d23f7c-e74b-4093-9135-ea15a67419d0",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 404', () => pm.response.to.have.status(404));"
+              ],
+              "_lastExecutionId": "9739a34b-5330-46fb-a66e-413d3e51d14f"
+            }
+          }
+        ]
+      },
+      {
+        "id": "8febf483-fcc3-4a0b-9d78-40db87a27fbf",
+        "name": "PUT Update coupon",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "319326de971100158f6fa0daeec978fba1f17e4b"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"title\": \"Save 25% on Fairmont hotels\",\n  \"coupon_code\": \"SAVE25\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "22c39eb1-4b00-4733-b7c1-0350dceb77e9",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                "pm.test('Returns the updated coupon', () => {",
+                "  const coupon = pm.response.json();",
+                "  pm.expect(coupon.title).to.eql('Save 25% on Fairmont hotels');",
+                "  pm.expect(coupon.coupon_code).to.eql('SAVE25');",
+                "  pm.expect(coupon.provider_id).to.eql('FAIRMONT');",
+                "});"
+              ],
+              "_lastExecutionId": "72cc8792-9ab2-4a12-8138-b370f2ee4216"
+            }
+          }
+        ]
+      },
+      {
+        "id": "0c0210b5-f0a1-4ca6-bcc2-a98d76de12ca",
+        "name": "GET Coupon by id - update was saved",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "319326de971100158f6fa0daeec978fba1f17e4b"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "0dfa6c2b-5425-4676-9da0-128ba57943d8",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                "pm.test('Shows the updated coupon code', () => pm.expect(pm.response.json().coupon_code).to.eql('SAVE25'));"
+              ],
+              "_lastExecutionId": "bac29465-7379-400d-8c7c-8e027dbf60d7"
+            }
+          }
+        ]
+      },
+      {
+        "id": "02dc674a-8d37-451b-ad6e-d48666408868",
+        "name": "PUT Restore coupon",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "319326de971100158f6fa0daeec978fba1f17e4b"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"title\": \"Save 20% on Fairmont hotels\",\n  \"coupon_code\": \"SAVE20\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "97431eb4-ad06-42ff-86c0-595e3b4b868c",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                "pm.test('Coupon is back to the original', () => pm.expect(pm.response.json().coupon_code).to.eql('SAVE20'));"
+              ],
+              "_lastExecutionId": "0b5d7847-96f0-4c21-a566-aeb9ea6ef655"
+            }
+          }
+        ]
+      },
+      {
+        "id": "30edcf57-154d-4ffa-bfdc-07280495c5a1",
+        "name": "PUT Update coupon - not found",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "does-not-exist"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"title\": \"x\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "2a3a7907-1474-4261-9bc7-7b5596fb28a8",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 404', () => pm.response.to.have.status(404));"
+              ],
+              "_lastExecutionId": "b0b20a3f-996b-449c-b765-d9d445ebcc50"
+            }
+          }
+        ]
+      },
+      {
+        "id": "6ae28cc8-9275-4083-b76b-c2bea8bd8fa3",
+        "name": "POST Token - valid credentials",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "token"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"username\": \"tester1\",\n  \"password\": \"Pc4RM0AMKy5aSGfD\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "c2c67c87-f494-48dd-a2ca-3147d83bb779",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                "pm.test('Returns a token and expiresIn', () => {",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.token).to.be.a('string');",
+                "  pm.expect(body.token.split('.')).to.have.lengthOf(3);",
+                "  pm.expect(body.expiresIn).to.eql(3600);",
+                "  pm.collectionVariables.set('token', body.token);",
+                "});"
+              ],
+              "_lastExecutionId": "fbd1bf52-924c-440d-bdbc-0893f7b8e188"
+            }
+          }
+        ]
+      },
+      {
+        "id": "2d2e74a6-51dc-4eaa-9721-9766505e1ab2",
+        "name": "POST Token - second user",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "token"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"username\": \"tester2\",\n  \"password\": \"4LWs6xnc1t32BzXA\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "95615f0d-6c7c-4648-9f7a-c104bb5d4109",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 200', () => pm.response.to.have.status(200));"
+              ],
+              "_lastExecutionId": "e6a8196a-98c1-46e8-96e6-d2f9d0a92bfa"
+            }
+          }
+        ]
+      },
+      {
+        "id": "db02a679-babf-4711-b0b7-14e9a8d9f9d3",
+        "name": "POST Token - wrong password returns 403",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "token"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"username\": \"tester1\",\n  \"password\": \"wrong-password\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "5de3da16-6db9-4ccf-87f4-9dce88d3a325",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 403', () => pm.response.to.have.status(403));",
+                "pm.test('No token returned', () => pm.expect(pm.response.json().token).to.be.undefined);"
+              ],
+              "_lastExecutionId": "5933e053-79b6-4f52-9691-2fe55187a155"
+            }
+          }
+        ]
+      },
+      {
+        "id": "a28e3966-f972-42ae-a223-fd3b8b0860e2",
+        "name": "POST Token - unknown user returns 403",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "token"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"username\": \"nobody\",\n  \"password\": \"Pc4RM0AMKy5aSGfD\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "f175c873-e746-4377-a9cc-914072c46e3a",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 403', () => pm.response.to.have.status(403));"
+              ],
+              "_lastExecutionId": "a5d3765e-aa73-4b3b-960f-f69742c08f31"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ff088c64-9c56-4f33-95eb-366b26a6b3a4",
+        "name": "GET To secure - valid token",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "to_secure"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "af7e8aae-6767-4290-ad20-c2e0d5a378e9",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                "pm.test('Access granted to tester1', () => {",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.status).to.eql('success');",
+                "  pm.expect(body.username).to.eql('tester1');",
+                "});"
+              ],
+              "_lastExecutionId": "48a86ec9-13af-450b-bfdc-2a45c405cbc8"
+            }
+          }
+        ]
+      },
+      {
+        "id": "206daa95-5717-4069-98c7-e487338534c4",
+        "name": "GET To secure - no token returns 403",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "to_secure"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "44bc7b52-7f7b-4d11-9287-aaa35566062c",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 403', () => pm.response.to.have.status(403));"
+              ],
+              "_lastExecutionId": "4f18b76d-6dbf-487c-8edd-4d0c8a268709"
+            }
+          }
+        ]
+      },
+      {
+        "id": "d902ab1e-d323-49aa-a66b-11095052140a",
+        "name": "GET To secure - invalid token returns 403",
+        "request": {
+          "url": {
+            "port": "4566",
+            "path": [
+              "restapis",
+              "{{api_id}}",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "to_secure"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer not.a.validtoken"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "a49ca314-d7de-4277-81d5-e62b412d06e4",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status code is 403', () => pm.response.to.have.status(403));"
+              ],
+              "_lastExecutionId": "77f47b88-d2c0-4c90-9a25-7bb4ccf255b1"
+            }
+          }
+        ]
+      }
+    ],
+    "event": [],
+    "variable": [],
+    "info": {
+      "_postman_id": "1ae2f770-c95d-4f1d-978e-3b1bfe4acf54",
+      "name": "Coupons API Test",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    }
+  },
+  "environment": {
+    "id": "fc8ab8fc-ef78-4379-bba1-1a22ef2118d8",
+    "values": [
+      {
+        "type": "any",
+        "value": "mslczrcoun",
+        "key": "api_id"
+      }
+    ]
+  },
+  "globals": {
+    "id": "fd33b818-903d-47b8-b1a0-41249fb5ce94",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 14,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 14,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 14,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 14,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 14,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 22,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 14,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 159.28571428571428,
+      "responseMin": 42,
+      "responseMax": 530,
+      "responseSd": 190.96088925350605,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1793771478840,
+      "completed": 1793771482306
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 14,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "2e896960-b9fb-47ba-b9a3-220e3c8306ff",
+          "httpRequestId": "a784bd8e-1f35-48f6-bf57-80cc9d60dd31"
+        },
+        "item": {
+          "id": "67bd0941-ebe6-4338-ae09-8a01cb4f33fc",
+          "name": "GET Coupons Endpoint",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons_poc"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "94e12ad0-db25-4cf7-b6d4-236bbd60a428",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns the working message', () => pm.expect(pm.response.json().message).to.eql('Coupons API is working successfully'));"
+                ],
+                "_lastExecutionId": "d30088af-c207-493f-b285-30dadb0a716d"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons_poc"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "3166905c-06d0-45c2-9601-b964052d73aa",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "cefd3410-6b71-4a19-9e0e-78ee9ee1e871",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:18 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "49"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "14a3251c-fd06-4ed4-958f-6051258becdf"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "855d9be3="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d6-dcd32adb4349865edf986d39;Parent=309802e03b558bbe;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              67,
+              111,
+              117,
+              112,
+              111,
+              110,
+              115,
+              32,
+              65,
+              80,
+              73,
+              32,
+              105,
+              115,
+              32,
+              119,
+              111,
+              114,
+              107,
+              105,
+              110,
+              103,
+              32,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              102,
+              117,
+              108,
+              108,
+              121,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 99,
+          "responseSize": 49
+        },
+        "id": "67bd0941-ebe6-4338-ae09-8a01cb4f33fc",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Returns the working message",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "eb3fd42c-7563-459f-8f7c-5c8f89c8443b",
+          "length": 14,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "0539a4ef-310a-4e8b-abd5-ce53f4d49b38"
+        },
+        "item": {
+          "id": "61222530-822f-4091-91f0-7c15e01f9005",
+          "name": "GET Coupon by id",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons",
+                "319326de971100158f6fa0daeec978fba1f17e4b"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "645d09f8-9db4-4aac-b6d1-55e709cc492f",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns the requested coupon', () => {",
+                  "  const coupon = pm.response.json();",
+                  "  pm.expect(coupon.coupon_id).to.eql('319326de971100158f6fa0daeec978fba1f17e4b');",
+                  "  pm.expect(coupon).to.include.keys('title', 'description', 'coupon_code', 'campaign_id', 'provider_id', 'provider_name', 'start_date', 'end_date');",
+                  "});"
+                ],
+                "_lastExecutionId": "21d438aa-4a8d-4ba0-92d4-bb24f44c6a54"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "319326de971100158f6fa0daeec978fba1f17e4b"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "caeb4412-6e6c-4ddb-9b4d-43ce194290ed",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "408f9655-29ba-47c5-8a00-383232cf0424",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:19 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "358"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "bb3afe71-1052-4c80-8bb4-77aa3ae29f01"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "0c168a9e="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d7-1ea858a36f3723997a2ecca7;Parent=ef3509d02b271d3b;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              99,
+              97,
+              109,
+              112,
+              97,
+              105,
+              103,
+              110,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              67,
+              72,
+              82,
+              73,
+              83,
+              84,
+              77,
+              65,
+              83,
+              50,
+              48,
+              50,
+              50,
+              34,
+              44,
+              34,
+              99,
+              111,
+              117,
+              112,
+              111,
+              110,
+              95,
+              99,
+              111,
+              100,
+              101,
+              34,
+              58,
+              34,
+              83,
+              65,
+              86,
+              69,
+              50,
+              48,
+              34,
+              44,
+              34,
+              99,
+              111,
+              117,
+              112,
+              111,
+              110,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              51,
+              49,
+              57,
+              51,
+              50,
+              54,
+              100,
+              101,
+              57,
+              55,
+              49,
+              49,
+              48,
+              48,
+              49,
+              53,
+              56,
+              102,
+              54,
+              102,
+              97,
+              48,
+              100,
+              97,
+              101,
+              101,
+              99,
+              57,
+              55,
+              56,
+              102,
+              98,
+              97,
+              49,
+              102,
+              49,
+              55,
+              101,
+              52,
+              98,
+              34,
+              44,
+              34,
+              100,
+              101,
+              115,
+              99,
+              114,
+              105,
+              112,
+              116,
+              105,
+              111,
+              110,
+              34,
+              58,
+              34,
+              83,
+              97,
+              118,
+              101,
+              32,
+              50,
+              48,
+              37,
+              32,
+              111,
+              110,
+              32,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              104,
+              111,
+              116,
+              101,
+              108,
+              115,
+              32,
+              119,
+              104,
+              101,
+              110,
+              32,
+              121,
+              111,
+              117,
+              32,
+              98,
+              111,
+              111,
+              107,
+              32,
+              121,
+              111,
+              117,
+              114,
+              32,
+              115,
+              116,
+              97,
+              121,
+              32,
+              116,
+              104,
+              114,
+              111,
+              117,
+              103,
+              104,
+              32,
+              68,
+              101,
+              99,
+              101,
+              109,
+              98,
+              101,
+              114,
+              32,
+              50,
+              48,
+              50,
+              50,
+              34,
+              44,
+              34,
+              101,
+              110,
+              100,
+              95,
+              100,
+              97,
+              116,
+              101,
+              34,
+              58,
+              34,
+              49,
+              54,
+              55,
+              50,
+              52,
+              52,
+              52,
+              56,
+              48,
+              48,
+              34,
+              44,
+              34,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              70,
+              65,
+              73,
+              82,
+              77,
+              79,
+              78,
+              84,
+              34,
+              44,
+              34,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              95,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              72,
+              111,
+              116,
+              101,
+              108,
+              115,
+              32,
+              97,
+              110,
+              100,
+              32,
+              82,
+              101,
+              115,
+              111,
+              114,
+              116,
+              115,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              114,
+              116,
+              95,
+              100,
+              97,
+              116,
+              101,
+              34,
+              58,
+              34,
+              49,
+              54,
+              54,
+              57,
+              56,
+              53,
+              50,
+              56,
+              48,
+              48,
+              34,
+              44,
+              34,
+              116,
+              105,
+              116,
+              108,
+              101,
+              34,
+              58,
+              34,
+              83,
+              97,
+              118,
+              101,
+              32,
+              50,
+              48,
+              37,
+              32,
+              111,
+              110,
+              32,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              104,
+              111,
+              116,
+              101,
+              108,
+              115,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 54,
+          "responseSize": 358
+        },
+        "id": "61222530-822f-4091-91f0-7c15e01f9005",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Returns the requested coupon",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "d21bdbc6-c07d-4a8b-aea9-15ddba8da72f",
+          "length": 14,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "7aeaf85a-c795-475c-a33a-24be346be9d3"
+        },
+        "item": {
+          "id": "ad3db434-e746-43b2-ae3c-74786d90700e",
+          "name": "GET Coupon by id - not found",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons",
+                "does-not-exist"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a4d23f7c-e74b-4093-9135-ea15a67419d0",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 404', () => pm.response.to.have.status(404));"
+                ],
+                "_lastExecutionId": "9739a34b-5330-46fb-a66e-413d3e51d14f"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "does-not-exist"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "49b6f3b2-6b0e-4589-a268-b1783af9f46a",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "12a59d5e-ad8c-43a0-8166-2d947e01a93e",
+          "status": "NOT FOUND",
+          "code": 404,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:19 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "45"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "975262b4-6e5c-4a18-ba12-e8273de35aa5"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "27e1e168="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d7-edc658e5f2f135dc3ed2f172;Parent=78465551ca91f7ea;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              67,
+              111,
+              117,
+              112,
+              111,
+              110,
+              32,
+              100,
+              111,
+              101,
+              115,
+              45,
+              110,
+              111,
+              116,
+              45,
+              101,
+              120,
+              105,
+              115,
+              116,
+              32,
+              110,
+              111,
+              116,
+              32,
+              102,
+              111,
+              117,
+              110,
+              100,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 57,
+          "responseSize": 45
+        },
+        "id": "ad3db434-e746-43b2-ae3c-74786d90700e",
+        "assertions": [
+          {
+            "assertion": "Status code is 404",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "72449289-4d54-4f1e-91e5-14919406b8cc",
+          "length": 14,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "9d658c19-2ece-4d1a-97cc-0defe7bdc43f"
+        },
+        "item": {
+          "id": "8febf483-fcc3-4a0b-9d78-40db87a27fbf",
+          "name": "PUT Update coupon",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons",
+                "319326de971100158f6fa0daeec978fba1f17e4b"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Save 25% on Fairmont hotels\",\n  \"coupon_code\": \"SAVE25\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "22c39eb1-4b00-4733-b7c1-0350dceb77e9",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns the updated coupon', () => {",
+                  "  const coupon = pm.response.json();",
+                  "  pm.expect(coupon.title).to.eql('Save 25% on Fairmont hotels');",
+                  "  pm.expect(coupon.coupon_code).to.eql('SAVE25');",
+                  "  pm.expect(coupon.provider_id).to.eql('FAIRMONT');",
+                  "});"
+                ],
+                "_lastExecutionId": "72cc8792-9ab2-4a12-8138-b370f2ee4216"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "319326de971100158f6fa0daeec978fba1f17e4b"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "00abdd44-6f9a-4908-ac32-247464c3dcbc",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "71",
+              "system": true
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"title\": \"Save 25% on Fairmont hotels\",\n  \"coupon_code\": \"SAVE25\"\n}"
+          }
+        },
+        "response": {
+          "id": "2bbaf963-6346-4c46-a75c-19ea6e1944c8",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:19 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "358"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "c5bdfd75-1625-46ac-ae4d-21083a8f0a76"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "b3bd0ded="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d7-29b8257ef720577025b8e52f;Parent=c4d04a13a420140d;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              99,
+              97,
+              109,
+              112,
+              97,
+              105,
+              103,
+              110,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              67,
+              72,
+              82,
+              73,
+              83,
+              84,
+              77,
+              65,
+              83,
+              50,
+              48,
+              50,
+              50,
+              34,
+              44,
+              34,
+              99,
+              111,
+              117,
+              112,
+              111,
+              110,
+              95,
+              99,
+              111,
+              100,
+              101,
+              34,
+              58,
+              34,
+              83,
+              65,
+              86,
+              69,
+              50,
+              53,
+              34,
+              44,
+              34,
+              99,
+              111,
+              117,
+              112,
+              111,
+              110,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              51,
+              49,
+              57,
+              51,
+              50,
+              54,
+              100,
+              101,
+              57,
+              55,
+              49,
+              49,
+              48,
+              48,
+              49,
+              53,
+              56,
+              102,
+              54,
+              102,
+              97,
+              48,
+              100,
+              97,
+              101,
+              101,
+              99,
+              57,
+              55,
+              56,
+              102,
+              98,
+              97,
+              49,
+              102,
+              49,
+              55,
+              101,
+              52,
+              98,
+              34,
+              44,
+              34,
+              100,
+              101,
+              115,
+              99,
+              114,
+              105,
+              112,
+              116,
+              105,
+              111,
+              110,
+              34,
+              58,
+              34,
+              83,
+              97,
+              118,
+              101,
+              32,
+              50,
+              48,
+              37,
+              32,
+              111,
+              110,
+              32,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              104,
+              111,
+              116,
+              101,
+              108,
+              115,
+              32,
+              119,
+              104,
+              101,
+              110,
+              32,
+              121,
+              111,
+              117,
+              32,
+              98,
+              111,
+              111,
+              107,
+              32,
+              121,
+              111,
+              117,
+              114,
+              32,
+              115,
+              116,
+              97,
+              121,
+              32,
+              116,
+              104,
+              114,
+              111,
+              117,
+              103,
+              104,
+              32,
+              68,
+              101,
+              99,
+              101,
+              109,
+              98,
+              101,
+              114,
+              32,
+              50,
+              48,
+              50,
+              50,
+              34,
+              44,
+              34,
+              101,
+              110,
+              100,
+              95,
+              100,
+              97,
+              116,
+              101,
+              34,
+              58,
+              34,
+              49,
+              54,
+              55,
+              50,
+              52,
+              52,
+              52,
+              56,
+              48,
+              48,
+              34,
+              44,
+              34,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              70,
+              65,
+              73,
+              82,
+              77,
+              79,
+              78,
+              84,
+              34,
+              44,
+              34,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              95,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              72,
+              111,
+              116,
+              101,
+              108,
+              115,
+              32,
+              97,
+              110,
+              100,
+              32,
+              82,
+              101,
+              115,
+              111,
+              114,
+              116,
+              115,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              114,
+              116,
+              95,
+              100,
+              97,
+              116,
+              101,
+              34,
+              58,
+              34,
+              49,
+              54,
+              54,
+              57,
+              56,
+              53,
+              50,
+              56,
+              48,
+              48,
+              34,
+              44,
+              34,
+              116,
+              105,
+              116,
+              108,
+              101,
+              34,
+              58,
+              34,
+              83,
+              97,
+              118,
+              101,
+              32,
+              50,
+              53,
+              37,
+              32,
+              111,
+              110,
+              32,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              104,
+              111,
+              116,
+              101,
+              108,
+              115,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 74,
+          "responseSize": 358
+        },
+        "id": "8febf483-fcc3-4a0b-9d78-40db87a27fbf",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Returns the updated coupon",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "a7cadede-9497-46f4-9942-673326edc31d",
+          "length": 14,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "eac703fe-0f03-4180-be73-01cf71f4f664"
+        },
+        "item": {
+          "id": "0c0210b5-f0a1-4ca6-bcc2-a98d76de12ca",
+          "name": "GET Coupon by id - update was saved",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons",
+                "319326de971100158f6fa0daeec978fba1f17e4b"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "0dfa6c2b-5425-4676-9da0-128ba57943d8",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Shows the updated coupon code', () => pm.expect(pm.response.json().coupon_code).to.eql('SAVE25'));"
+                ],
+                "_lastExecutionId": "bac29465-7379-400d-8c7c-8e027dbf60d7"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "319326de971100158f6fa0daeec978fba1f17e4b"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "d84f0272-b1f2-45d4-b3af-fcb41fb239bf",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "782e0276-96b8-43ca-a748-a56689d43063",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:19 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "358"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "8f2b2e9c-0703-4d0d-bd6b-b4d5eabb2660"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "5ede6c3d="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d7-8115c828ad4582fd728f570c;Parent=a7ae6bf22780e5f9;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              99,
+              97,
+              109,
+              112,
+              97,
+              105,
+              103,
+              110,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              67,
+              72,
+              82,
+              73,
+              83,
+              84,
+              77,
+              65,
+              83,
+              50,
+              48,
+              50,
+              50,
+              34,
+              44,
+              34,
+              99,
+              111,
+              117,
+              112,
+              111,
+              110,
+              95,
+              99,
+              111,
+              100,
+              101,
+              34,
+              58,
+              34,
+              83,
+              65,
+              86,
+              69,
+              50,
+              53,
+              34,
+              44,
+              34,
+              99,
+              111,
+              117,
+              112,
+              111,
+              110,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              51,
+              49,
+              57,
+              51,
+              50,
+              54,
+              100,
+              101,
+              57,
+              55,
+              49,
+              49,
+              48,
+              48,
+              49,
+              53,
+              56,
+              102,
+              54,
+              102,
+              97,
+              48,
+              100,
+              97,
+              101,
+              101,
+              99,
+              57,
+              55,
+              56,
+              102,
+              98,
+              97,
+              49,
+              102,
+              49,
+              55,
+              101,
+              52,
+              98,
+              34,
+              44,
+              34,
+              100,
+              101,
+              115,
+              99,
+              114,
+              105,
+              112,
+              116,
+              105,
+              111,
+              110,
+              34,
+              58,
+              34,
+              83,
+              97,
+              118,
+              101,
+              32,
+              50,
+              48,
+              37,
+              32,
+              111,
+              110,
+              32,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              104,
+              111,
+              116,
+              101,
+              108,
+              115,
+              32,
+              119,
+              104,
+              101,
+              110,
+              32,
+              121,
+              111,
+              117,
+              32,
+              98,
+              111,
+              111,
+              107,
+              32,
+              121,
+              111,
+              117,
+              114,
+              32,
+              115,
+              116,
+              97,
+              121,
+              32,
+              116,
+              104,
+              114,
+              111,
+              117,
+              103,
+              104,
+              32,
+              68,
+              101,
+              99,
+              101,
+              109,
+              98,
+              101,
+              114,
+              32,
+              50,
+              48,
+              50,
+              50,
+              34,
+              44,
+              34,
+              101,
+              110,
+              100,
+              95,
+              100,
+              97,
+              116,
+              101,
+              34,
+              58,
+              34,
+              49,
+              54,
+              55,
+              50,
+              52,
+              52,
+              52,
+              56,
+              48,
+              48,
+              34,
+              44,
+              34,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              70,
+              65,
+              73,
+              82,
+              77,
+              79,
+              78,
+              84,
+              34,
+              44,
+              34,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              95,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              72,
+              111,
+              116,
+              101,
+              108,
+              115,
+              32,
+              97,
+              110,
+              100,
+              32,
+              82,
+              101,
+              115,
+              111,
+              114,
+              116,
+              115,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              114,
+              116,
+              95,
+              100,
+              97,
+              116,
+              101,
+              34,
+              58,
+              34,
+              49,
+              54,
+              54,
+              57,
+              56,
+              53,
+              50,
+              56,
+              48,
+              48,
+              34,
+              44,
+              34,
+              116,
+              105,
+              116,
+              108,
+              101,
+              34,
+              58,
+              34,
+              83,
+              97,
+              118,
+              101,
+              32,
+              50,
+              53,
+              37,
+              32,
+              111,
+              110,
+              32,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              104,
+              111,
+              116,
+              101,
+              108,
+              115,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 67,
+          "responseSize": 358
+        },
+        "id": "0c0210b5-f0a1-4ca6-bcc2-a98d76de12ca",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Shows the updated coupon code",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "5c10bc36-f2c6-4c79-b505-6e8d519cb2d3",
+          "length": 14,
+          "cycles": 1,
+          "position": 5,
+          "iteration": 0,
+          "httpRequestId": "a269db47-d97b-4327-94d3-3596431d375e"
+        },
+        "item": {
+          "id": "02dc674a-8d37-451b-ad6e-d48666408868",
+          "name": "PUT Restore coupon",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons",
+                "319326de971100158f6fa0daeec978fba1f17e4b"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Save 20% on Fairmont hotels\",\n  \"coupon_code\": \"SAVE20\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "97431eb4-ad06-42ff-86c0-595e3b4b868c",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Coupon is back to the original', () => pm.expect(pm.response.json().coupon_code).to.eql('SAVE20'));"
+                ],
+                "_lastExecutionId": "0b5d7847-96f0-4c21-a566-aeb9ea6ef655"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "319326de971100158f6fa0daeec978fba1f17e4b"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "7393d249-9a89-4f51-ae96-916140e93d8b",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "71",
+              "system": true
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"title\": \"Save 20% on Fairmont hotels\",\n  \"coupon_code\": \"SAVE20\"\n}"
+          }
+        },
+        "response": {
+          "id": "45917295-4e98-489f-93ff-e9173db7ba14",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:19 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "358"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "fd96104f-439d-46ff-9362-7ecba6516654"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "d2469aee="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d7-f035e985171c79543dc7dd27;Parent=3a1852787d464467;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              99,
+              97,
+              109,
+              112,
+              97,
+              105,
+              103,
+              110,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              67,
+              72,
+              82,
+              73,
+              83,
+              84,
+              77,
+              65,
+              83,
+              50,
+              48,
+              50,
+              50,
+              34,
+              44,
+              34,
+              99,
+              111,
+              117,
+              112,
+              111,
+              110,
+              95,
+              99,
+              111,
+              100,
+              101,
+              34,
+              58,
+              34,
+              83,
+              65,
+              86,
+              69,
+              50,
+              48,
+              34,
+              44,
+              34,
+              99,
+              111,
+              117,
+              112,
+              111,
+              110,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              51,
+              49,
+              57,
+              51,
+              50,
+              54,
+              100,
+              101,
+              57,
+              55,
+              49,
+              49,
+              48,
+              48,
+              49,
+              53,
+              56,
+              102,
+              54,
+              102,
+              97,
+              48,
+              100,
+              97,
+              101,
+              101,
+              99,
+              57,
+              55,
+              56,
+              102,
+              98,
+              97,
+              49,
+              102,
+              49,
+              55,
+              101,
+              52,
+              98,
+              34,
+              44,
+              34,
+              100,
+              101,
+              115,
+              99,
+              114,
+              105,
+              112,
+              116,
+              105,
+              111,
+              110,
+              34,
+              58,
+              34,
+              83,
+              97,
+              118,
+              101,
+              32,
+              50,
+              48,
+              37,
+              32,
+              111,
+              110,
+              32,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              104,
+              111,
+              116,
+              101,
+              108,
+              115,
+              32,
+              119,
+              104,
+              101,
+              110,
+              32,
+              121,
+              111,
+              117,
+              32,
+              98,
+              111,
+              111,
+              107,
+              32,
+              121,
+              111,
+              117,
+              114,
+              32,
+              115,
+              116,
+              97,
+              121,
+              32,
+              116,
+              104,
+              114,
+              111,
+              117,
+              103,
+              104,
+              32,
+              68,
+              101,
+              99,
+              101,
+              109,
+              98,
+              101,
+              114,
+              32,
+              50,
+              48,
+              50,
+              50,
+              34,
+              44,
+              34,
+              101,
+              110,
+              100,
+              95,
+              100,
+              97,
+              116,
+              101,
+              34,
+              58,
+              34,
+              49,
+              54,
+              55,
+              50,
+              52,
+              52,
+              52,
+              56,
+              48,
+              48,
+              34,
+              44,
+              34,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              70,
+              65,
+              73,
+              82,
+              77,
+              79,
+              78,
+              84,
+              34,
+              44,
+              34,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              114,
+              95,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              72,
+              111,
+              116,
+              101,
+              108,
+              115,
+              32,
+              97,
+              110,
+              100,
+              32,
+              82,
+              101,
+              115,
+              111,
+              114,
+              116,
+              115,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              114,
+              116,
+              95,
+              100,
+              97,
+              116,
+              101,
+              34,
+              58,
+              34,
+              49,
+              54,
+              54,
+              57,
+              56,
+              53,
+              50,
+              56,
+              48,
+              48,
+              34,
+              44,
+              34,
+              116,
+              105,
+              116,
+              108,
+              101,
+              34,
+              58,
+              34,
+              83,
+              97,
+              118,
+              101,
+              32,
+              50,
+              48,
+              37,
+              32,
+              111,
+              110,
+              32,
+              70,
+              97,
+              105,
+              114,
+              109,
+              111,
+              110,
+              116,
+              32,
+              104,
+              111,
+              116,
+              101,
+              108,
+              115,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 59,
+          "responseSize": 358
+        },
+        "id": "02dc674a-8d37-451b-ad6e-d48666408868",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Coupon is back to the original",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "8cd1b270-f8ed-420b-b20c-b48744164967",
+          "length": 14,
+          "cycles": 1,
+          "position": 6,
+          "iteration": 0,
+          "httpRequestId": "a708d509-e475-4f51-b54f-e95e41ca5629"
+        },
+        "item": {
+          "id": "30edcf57-154d-4ffa-bfdc-07280495c5a1",
+          "name": "PUT Update coupon - not found",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons",
+                "does-not-exist"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"x\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "2a3a7907-1474-4261-9bc7-7b5596fb28a8",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 404', () => pm.response.to.have.status(404));"
+                ],
+                "_lastExecutionId": "b0b20a3f-996b-449c-b765-d9d445ebcc50"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "does-not-exist"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "3f296834-7441-4dbc-908c-c2b159b18f15",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "18",
+              "system": true
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"title\": \"x\"\n}"
+          }
+        },
+        "response": {
+          "id": "db3d0bbe-76c7-45e2-a38d-6311b91fbdaf",
+          "status": "NOT FOUND",
+          "code": 404,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:19 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "45"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "45fb2d56-c448-4f41-a310-6e061100dc90"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "ceab52c6="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d7-7b75a1cac3c630c94ef63b3f;Parent=1bae0cb8a3d32563;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              67,
+              111,
+              117,
+              112,
+              111,
+              110,
+              32,
+              100,
+              111,
+              101,
+              115,
+              45,
+              110,
+              111,
+              116,
+              45,
+              101,
+              120,
+              105,
+              115,
+              116,
+              32,
+              110,
+              111,
+              116,
+              32,
+              102,
+              111,
+              117,
+              110,
+              100,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 54,
+          "responseSize": 45
+        },
+        "id": "30edcf57-154d-4ffa-bfdc-07280495c5a1",
+        "assertions": [
+          {
+            "assertion": "Status code is 404",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "09d149c1-6ca1-48b9-ab1e-d32a82baa6da",
+          "length": 14,
+          "cycles": 1,
+          "position": 7,
+          "iteration": 0,
+          "httpRequestId": "924999a8-2108-480b-8d77-6a44fc47fa41"
+        },
+        "item": {
+          "id": "6ae28cc8-9275-4083-b76b-c2bea8bd8fa3",
+          "name": "POST Token - valid credentials",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "token"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"tester1\",\n  \"password\": \"Pc4RM0AMKy5aSGfD\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c2c67c87-f494-48dd-a2ca-3147d83bb779",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns a token and expiresIn', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.token).to.be.a('string');",
+                  "  pm.expect(body.token.split('.')).to.have.lengthOf(3);",
+                  "  pm.expect(body.expiresIn).to.eql(3600);",
+                  "  pm.collectionVariables.set('token', body.token);",
+                  "});"
+                ],
+                "_lastExecutionId": "fbd1bf52-924c-440d-bdbc-0893f7b8e188"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "token"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "0c6dc859-ccb1-47a6-818e-f10d1c8c6725",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "61",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"username\": \"tester1\",\n  \"password\": \"Pc4RM0AMKy5aSGfD\"\n}"
+          }
+        },
+        "response": {
+          "id": "9752b1e4-fbd2-4029-9c01-2a7250db43b6",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:20 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "178"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "105319e8-052b-4941-a330-80d0856464ab"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "f1e99705="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d8-79592c21a3266e6bf33b8642;Parent=419b9776a4bec15b;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              101,
+              121,
+              74,
+              104,
+              98,
+              71,
+              99,
+              105,
+              79,
+              105,
+              74,
+              73,
+              85,
+              122,
+              73,
+              49,
+              78,
+              105,
+              73,
+              115,
+              73,
+              110,
+              82,
+              53,
+              99,
+              67,
+              73,
+              54,
+              73,
+              107,
+              112,
+              88,
+              86,
+              67,
+              74,
+              57,
+              46,
+              101,
+              121,
+              74,
+              122,
+              100,
+              87,
+              73,
+              105,
+              79,
+              105,
+              74,
+              48,
+              90,
+              88,
+              78,
+              48,
+              90,
+              88,
+              73,
+              120,
+              73,
+              105,
+              119,
+              105,
+              97,
+              87,
+              70,
+              48,
+              73,
+              106,
+              111,
+              120,
+              78,
+              122,
+              107,
+              122,
+              78,
+              122,
+              99,
+              120,
+              78,
+              68,
+              103,
+              119,
+              76,
+              67,
+              74,
+              108,
+              101,
+              72,
+              65,
+              105,
+              79,
+              106,
+              69,
+              51,
+              79,
+              84,
+              77,
+              51,
+              78,
+              122,
+              85,
+              119,
+              79,
+              68,
+              66,
+              57,
+              46,
+              82,
+              117,
+              67,
+              98,
+              49,
+              104,
+              54,
+              80,
+              54,
+              49,
+              74,
+              119,
+              107,
+              45,
+              70,
+              83,
+              74,
+              71,
+              118,
+              107,
+              45,
+              110,
+              87,
+              107,
+              49,
+              77,
+              120,
+              114,
+              57,
+              116,
+              69,
+              57,
+              114,
+              71,
+              120,
+              70,
+              90,
+              101,
+              54,
+              101,
+              98,
+              119,
+              119,
+              34,
+              44,
+              34,
+              101,
+              120,
+              112,
+              105,
+              114,
+              101,
+              115,
+              73,
+              110,
+              34,
+              58,
+              51,
+              54,
+              48,
+              48,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 527,
+          "responseSize": 178
+        },
+        "id": "6ae28cc8-9275-4083-b76b-c2bea8bd8fa3",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Returns a token and expiresIn",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "51fe760f-7818-4600-ba7c-a3fdd027cddc",
+          "length": 14,
+          "cycles": 1,
+          "position": 8,
+          "iteration": 0,
+          "httpRequestId": "b85ae09b-8eed-4801-9d66-52cf409e1fa4"
+        },
+        "item": {
+          "id": "2d2e74a6-51dc-4eaa-9721-9766505e1ab2",
+          "name": "POST Token - second user",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "token"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"tester2\",\n  \"password\": \"4LWs6xnc1t32BzXA\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "95615f0d-6c7c-4648-9f7a-c104bb5d4109",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));"
+                ],
+                "_lastExecutionId": "e6a8196a-98c1-46e8-96e6-d2f9d0a92bfa"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "token"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "cfe2fe92-5be9-4d6b-94c4-0996f17ff2f3",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "61",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"username\": \"tester2\",\n  \"password\": \"4LWs6xnc1t32BzXA\"\n}"
+          }
+        },
+        "response": {
+          "id": "3ee90817-b45c-43c7-8895-2c6bd36ba47e",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:20 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "178"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "9496a2d2-0649-4fc9-85f4-edbf24f5e1da"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "4d9c448e="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d8-d5c8b6c7775672d5e969467c;Parent=d5c811c0e6be0e54;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              58,
+              34,
+              101,
+              121,
+              74,
+              104,
+              98,
+              71,
+              99,
+              105,
+              79,
+              105,
+              74,
+              73,
+              85,
+              122,
+              73,
+              49,
+              78,
+              105,
+              73,
+              115,
+              73,
+              110,
+              82,
+              53,
+              99,
+              67,
+              73,
+              54,
+              73,
+              107,
+              112,
+              88,
+              86,
+              67,
+              74,
+              57,
+              46,
+              101,
+              121,
+              74,
+              122,
+              100,
+              87,
+              73,
+              105,
+              79,
+              105,
+              74,
+              48,
+              90,
+              88,
+              78,
+              48,
+              90,
+              88,
+              73,
+              121,
+              73,
+              105,
+              119,
+              105,
+              97,
+              87,
+              70,
+              48,
+              73,
+              106,
+              111,
+              120,
+              78,
+              122,
+              107,
+              122,
+              78,
+              122,
+              99,
+              120,
+              78,
+              68,
+              103,
+              120,
+              76,
+              67,
+              74,
+              108,
+              101,
+              72,
+              65,
+              105,
+              79,
+              106,
+              69,
+              51,
+              79,
+              84,
+              77,
+              51,
+              78,
+              122,
+              85,
+              119,
+              79,
+              68,
+              70,
+              57,
+              46,
+              86,
+              86,
+              102,
+              48,
+              102,
+              84,
+              52,
+              53,
+              80,
+              67,
+              105,
+              74,
+              77,
+              68,
+              51,
+              106,
+              56,
+              121,
+              65,
+              111,
+              75,
+              101,
+              69,
+              109,
+              50,
+              57,
+              83,
+              75,
+              48,
+              54,
+              112,
+              48,
+              120,
+              90,
+              83,
+              80,
+              80,
+              115,
+              57,
+              113,
+              95,
+              66,
+              52,
+              34,
+              44,
+              34,
+              101,
+              120,
+              112,
+              105,
+              114,
+              101,
+              115,
+              73,
+              110,
+              34,
+              58,
+              51,
+              54,
+              48,
+              48,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 530,
+          "responseSize": 178
+        },
+        "id": "2d2e74a6-51dc-4eaa-9721-9766505e1ab2",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "f7be30db-c17e-4fc1-9a77-91cd20fce5c5",
+          "length": 14,
+          "cycles": 1,
+          "position": 9,
+          "iteration": 0,
+          "httpRequestId": "2346f0fe-576c-475f-9f6f-6a4785ada3c4"
+        },
+        "item": {
+          "id": "db02a679-babf-4711-b0b7-14e9a8d9f9d3",
+          "name": "POST Token - wrong password returns 403",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "token"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"tester1\",\n  \"password\": \"wrong-password\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5de3da16-6db9-4ccf-87f4-9dce88d3a325",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 403', () => pm.response.to.have.status(403));",
+                  "pm.test('No token returned', () => pm.expect(pm.response.json().token).to.be.undefined);"
+                ],
+                "_lastExecutionId": "5933e053-79b6-4f52-9691-2fe55187a155"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "token"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "85990613-94b1-4cff-b106-99cc8e957b2f",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "59",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"username\": \"tester1\",\n  \"password\": \"wrong-password\"\n}"
+          }
+        },
+        "response": {
+          "id": "a03689fb-8cc1-4b43-8c9d-42e402f7b6c2",
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:21 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "42"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "54b0e8ff-5d52-43d5-9822-6495fc7452d4"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "8557d443="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d9-ea3ab268acf98e6b3ff819ef;Parent=3ab311f9459cef19;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              73,
+              110,
+              118,
+              97,
+              108,
+              105,
+              100,
+              32,
+              117,
+              115,
+              101,
+              114,
+              110,
+              97,
+              109,
+              101,
+              32,
+              111,
+              114,
+              32,
+              112,
+              97,
+              115,
+              115,
+              119,
+              111,
+              114,
+              100,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 515,
+          "responseSize": 42
+        },
+        "id": "db02a679-babf-4711-b0b7-14e9a8d9f9d3",
+        "assertions": [
+          {
+            "assertion": "Status code is 403",
+            "skipped": false
+          },
+          {
+            "assertion": "No token returned",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "0828a32a-9b77-47c6-ade0-1812f09d2fa2",
+          "length": 14,
+          "cycles": 1,
+          "position": 10,
+          "iteration": 0,
+          "httpRequestId": "71edac17-5d4e-4842-a316-95c829a1a0cb"
+        },
+        "item": {
+          "id": "a28e3966-f972-42ae-a223-fd3b8b0860e2",
+          "name": "POST Token - unknown user returns 403",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "token"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nobody\",\n  \"password\": \"Pc4RM0AMKy5aSGfD\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "f175c873-e746-4377-a9cc-914072c46e3a",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 403', () => pm.response.to.have.status(403));"
+                ],
+                "_lastExecutionId": "a5d3765e-aa73-4b3b-960f-f69742c08f31"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "token"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "2fa09f69-7879-46f4-beba-70194e083190",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "60",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"username\": \"nobody\",\n  \"password\": \"Pc4RM0AMKy5aSGfD\"\n}"
+          }
+        },
+        "response": {
+          "id": "6126d98a-13ee-4caa-824d-fede7f39e219",
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:21 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "42"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "464f27c0-5723-4fa4-991e-da5019437494"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "22b8b5b2="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d9-7019b1ceef3e8f6a8f83f01c;Parent=f06684148403ec6b;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              73,
+              110,
+              118,
+              97,
+              108,
+              105,
+              100,
+              32,
+              117,
+              115,
+              101,
+              114,
+              110,
+              97,
+              109,
+              101,
+              32,
+              111,
+              114,
+              32,
+              112,
+              97,
+              115,
+              115,
+              119,
+              111,
+              114,
+              100,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 51,
+          "responseSize": 42
+        },
+        "id": "a28e3966-f972-42ae-a223-fd3b8b0860e2",
+        "assertions": [
+          {
+            "assertion": "Status code is 403",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "478ed632-9425-425f-b9e3-ac3266c9fd2c",
+          "length": 14,
+          "cycles": 1,
+          "position": 11,
+          "iteration": 0,
+          "httpRequestId": "4b1e1eba-72fc-44f1-a219-320936f16be8"
+        },
+        "item": {
+          "id": "ff088c64-9c56-4f33-95eb-366b26a6b3a4",
+          "name": "GET To secure - valid token",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons",
+                "to_secure"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "af7e8aae-6767-4290-ad20-c2e0d5a378e9",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Access granted to tester1', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.status).to.eql('success');",
+                  "  pm.expect(body.username).to.eql('tester1');",
+                  "});"
+                ],
+                "_lastExecutionId": "48a86ec9-13af-450b-bfdc-2a45c405cbc8"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "to_secure"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0ZXIxIiwiaWF0IjoxNzkzNzcxNDgwLCJleHAiOjE3OTM3NzUwODB9.RuCb1h6P61Jwk-FSJGvk-nWk1Mxr9tE9rGxFZe6ebww"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "a981c0a9-702e-44fe-8e0f-c1fe4b82d19f",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "9bddf21d-cf9d-4285-8ebe-b87f2fd64a26",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:21 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "41"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "e008d9b5-4037-4926-8a15-ef4dc2faa50f"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "ad8803d0="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7d9-93665cfb3a113cde7c7d4d95;Parent=caf333b62c83eae2;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              44,
+              34,
+              117,
+              115,
+              101,
+              114,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              116,
+              101,
+              115,
+              116,
+              101,
+              114,
+              49,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 57,
+          "responseSize": 41
+        },
+        "id": "ff088c64-9c56-4f33-95eb-366b26a6b3a4",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Access granted to tester1",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "9b2d34d2-85e3-4436-8f41-d2e60547febe",
+          "length": 14,
+          "cycles": 1,
+          "position": 12,
+          "iteration": 0,
+          "httpRequestId": "0f172488-d8a6-4248-b45d-78b7696ed5fc"
+        },
+        "item": {
+          "id": "206daa95-5717-4069-98c7-e487338534c4",
+          "name": "GET To secure - no token returns 403",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons",
+                "to_secure"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "44bc7b52-7f7b-4d11-9287-aaa35566062c",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 403', () => pm.response.to.have.status(403));"
+                ],
+                "_lastExecutionId": "4f18b76d-6dbf-487c-8edd-4d0c8a268709"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "to_secure"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "d182815f-869d-4fe3-9583-68adcb1e3284",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "973cddfd-88fd-482d-940d-ccb8dc244899",
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:22 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "38"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "1b04a19e-755a-4aaf-8fde-2e1cc5b12cd3"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "76787e90="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7da-2836b9930175b9027e0651ff;Parent=49007b1d056986b3;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              70,
+              111,
+              114,
+              98,
+              105,
+              100,
+              100,
+              101,
+              110,
+              58,
+              32,
+              109,
+              105,
+              115,
+              115,
+              105,
+              110,
+              103,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 42,
+          "responseSize": 38
+        },
+        "id": "206daa95-5717-4069-98c7-e487338534c4",
+        "assertions": [
+          {
+            "assertion": "Status code is 403",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "5b93a524-33b3-4642-bebb-6deca13a3a5e",
+          "length": 14,
+          "cycles": 1,
+          "position": 13,
+          "iteration": 0,
+          "httpRequestId": "3a7e1f97-3567-4f30-9425-14836cdc7150"
+        },
+        "item": {
+          "id": "d902ab1e-d323-49aa-a66b-11095052140a",
+          "name": "GET To secure - invalid token returns 403",
+          "request": {
+            "url": {
+              "port": "4566",
+              "path": [
+                "restapis",
+                "{{api_id}}",
+                "dev",
+                "_user_request_",
+                "coupons",
+                "to_secure"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer not.a.validtoken"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a49ca314-d7de-4277-81d5-e62b412d06e4",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 403', () => pm.response.to.have.status(403));"
+                ],
+                "_lastExecutionId": "77f47b88-d2c0-4c90-9a25-7bb4ccf255b1"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "4566",
+            "path": [
+              "restapis",
+              "mslczrcoun",
+              "dev",
+              "_user_request_",
+              "coupons",
+              "to_secure"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer not.a.validtoken"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "a86e896b-56c7-4260-9700-5274a29148e7",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:4566",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "805041f7-afdd-44ee-b117-96b1aa9b063d",
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Server",
+              "value": "TwistedWeb/26.4.0"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 04 Nov 2026 05:51:22 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Content-Length",
+              "value": "49"
+            },
+            {
+              "key": "x-amzn-RequestId",
+              "value": "ef5eac17-7511-40ae-b35a-68780a6389a9"
+            },
+            {
+              "key": "x-amz-apigw-id",
+              "value": "85b338f0="
+            },
+            {
+              "key": "X-Amzn-Trace-Id",
+              "value": "Root=1-6aeac7da-1f33b4f4a6295ab5628c369d;Parent=7631512c9641bb3d;Sampled=0"
+            },
+            {
+              "key": "x-localstack",
+              "value": "2026.10.5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              70,
+              111,
+              114,
+              98,
+              105,
+              100,
+              100,
+              101,
+              110,
+              58,
+              32,
+              105,
+              110,
+              118,
+              97,
+              108,
+              105,
+              100,
+              32,
+              111,
+              114,
+              32,
+              101,
+              120,
+              112,
+              105,
+              114,
+              101,
+              100,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 44,
+          "responseSize": 49
+        },
+        "id": "d902ab1e-d323-49aa-a66b-11095052140a",
+        "assertions": [
+          {
+            "assertion": "Status code is 403",
+            "skipped": false
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 2139
+    },
+    "failures": [],
+    "error": null
+  }
+}
