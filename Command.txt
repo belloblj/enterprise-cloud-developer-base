@@ -99,3 +99,64 @@ cd lambda/coupons_to_secure && npm install && npx jest && cd ../..
 
 # Run Newman tests (Parts 1, 2 and 3)
 npx newman run newman_tests/coupons_newman.json --env-var api_id=$(cat api_id.txt)
+
+# ================================================================
+# PART 4 - FILE MANAGEMENT (S3) (LocalStack, not a real AWS account)
+# Run from the project root, after Parts 1-3.
+# ================================================================
+
+# Create the private "coupons" bucket and let the Lambda role upload to it
+bash scripts/t4_create_s3_bucket.sh
+
+# Add the bucket policy: deleting files is denied unless MFA is used
+bash scripts/t4_add_bucket_policy.sh
+
+# Package and deploy coupons_import (saves coupons as <coupon_id>.json in the bucket)
+bash scripts/t4_update_coupons_import_lambda.sh
+
+# Package and deploy coupons_import_presigned_url (returns an upload URL)
+bash scripts/t4_update_coupons_import_presigned_url_lambda.sh
+
+# Add POST /coupons/import and POST /coupons/import_presigned_url to the API
+bash scripts/t4_provision_import_endpoints.sh
+
+# --- Option 1: import through the API ---
+# Send the sample coupon (200, {"status":"success"})
+curl -X POST -H "Content-Type: application/json" \
+  -d @samples/t4_sample_coupon_import_event.json \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons/import
+
+# The file is in the bucket, named after the coupon_id
+lstk aws s3 ls s3://coupons --endpoint-url http://localhost:4566 --region us-east-1
+lstk aws s3 cp s3://coupons/319326de971100158f6fa0daeec978fba1f17e4b.json - --endpoint-url http://localhost:4566 --region us-east-1
+
+# --- Option 2: pre-signed URL, client uploads straight to S3 ---
+# Ask for an upload URL for coupon.json (200, returns "url")
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"filename": "coupon.json"}' \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons/import_presigned_url
+
+# Save the URL, then upload coupon.json with an HTTP PUT (200)
+URL=$(curl -s -X POST -H "Content-Type: application/json" \
+  -d '{"filename": "coupon.json"}' \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons/import_presigned_url | node -pe "JSON.parse(require('fs').readFileSync(0)).url")
+curl -i -X PUT -T samples/t4_sample_coupon_import_event.json "$URL"
+
+# coupon.json is now in the bucket
+lstk aws s3 ls s3://coupons --endpoint-url http://localhost:4566 --region us-east-1
+
+# A bad file name is refused (400)
+curl -i -X POST -H "Content-Type: application/json" \
+  -d '{"filename": "../other-folder/coupon.json"}' \
+  http://localhost:4566/restapis/$(cat api_id.txt)/dev/_user_request_/coupons/import_presigned_url
+
+# Show the bucket ACL and the MFA delete policy
+lstk aws s3api get-bucket-acl --bucket coupons --endpoint-url http://localhost:4566 --region us-east-1
+lstk aws s3api get-bucket-policy --bucket coupons --query Policy --output text --endpoint-url http://localhost:4566 --region us-east-1
+
+# Run unit tests
+cd lambda/coupons_import && npm install && npx jest && cd ../..
+cd lambda/coupons_import_presigned_url && npm install && npx jest && cd ../..
+
+# Run Newman tests (Parts 1-4)
+npx newman run newman_tests/coupons_newman.json --env-var api_id=$(cat api_id.txt)

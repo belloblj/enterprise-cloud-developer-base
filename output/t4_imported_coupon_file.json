@@ -1,0 +1,11 @@
+{
+  "coupon_id": "319326de971100158f6fa0daeec978fba1f17e4b",
+  "title": "Save 20% on Fairmont hotels",
+  "description": "Save 20% on Fairmont hotels when you book your stay through December 2022",
+  "coupon_code": "SAVE20",
+  "campaign_id": "CHRISTMAS2022",
+  "provider_id": "FAIRMONT",
+  "provider_name": "Fairmont Hotels and Resorts",
+  "start_date": "1669852800",
+  "end_date": "1672444800"
+}

@@ -574,6 +574,306 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "POST Import coupon (sample event)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returns status success', () => pm.expect(pm.response.json()).to.eql({ status: 'success' }));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/import",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "import"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"coupon_id\": \"319326de971100158f6fa0daeec978fba1f17e4b\",\n  \"title\": \"Save 20% on Fairmont hotels\",\n  \"description\": \"Save 20% on Fairmont hotels when you book your stay through December 2022\",\n  \"coupon_code\": \"SAVE20\",\n  \"campaign_id\": \"CHRISTMAS2022\",\n  \"provider_id\": \"FAIRMONT\",\n  \"provider_name\": \"Fairmont Hotels and Resorts\",\n  \"start_date\": \"1669852800\",\n  \"end_date\": \"1672444800\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Import coupons list",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returns status success', () => pm.expect(pm.response.json().status).to.eql('success'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/import",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "import"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"coupons\": [\n    {\n      \"coupon_id\": \"319326de971100158f6fa0daeec978fba1f17e4b\",\n      \"title\": \"Save 20% on Fairmont hotels\",\n      \"description\": \"Save 20% on Fairmont hotels when you book your stay through December 2022\",\n      \"coupon_code\": \"SAVE20\",\n      \"campaign_id\": \"CHRISTMAS2022\",\n      \"provider_id\": \"FAIRMONT\",\n      \"provider_name\": \"Fairmont Hotels and Resorts\",\n      \"start_date\": \"1669852800\",\n      \"end_date\": \"1672444800\"\n    },\n    {\n      \"coupon_id\": \"a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0\",\n      \"title\": \"Save 10% on Fairmont hotels\",\n      \"description\": \"Save 20% on Fairmont hotels when you book your stay through December 2022\",\n      \"coupon_code\": \"SAVE10\",\n      \"campaign_id\": \"CHRISTMAS2022\",\n      \"provider_id\": \"FAIRMONT\",\n      \"provider_name\": \"Fairmont Hotels and Resorts\",\n      \"start_date\": \"1669852800\",\n      \"end_date\": \"1672444800\"\n    }\n  ]\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Import coupon - missing coupon_id returns 400",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/import",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "import"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Save 20% on Fairmont hotels\",\n  \"description\": \"Save 20% on Fairmont hotels when you book your stay through December 2022\",\n  \"coupon_code\": \"SAVE20\",\n  \"campaign_id\": \"CHRISTMAS2022\",\n  \"provider_id\": \"FAIRMONT\",\n  \"provider_name\": \"Fairmont Hotels and Resorts\",\n  \"start_date\": \"1669852800\",\n  \"end_date\": \"1672444800\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Import presigned URL (sample event)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returns a URL for that file only', () => {",
+              "  const body = pm.response.json();",
+              "  pm.expect(body.status).to.eql('success');",
+              "  pm.expect(body.url).to.include('/coupons/319326de971100158f6fa0daeec978fba1f17e4b.json?');",
+              "  pm.expect(body.url).to.include('X-Amz-Signature=');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/import_presigned_url",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "import_presigned_url"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"filename\": \"319326de971100158f6fa0daeec978fba1f17e4b.json\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Import presigned URL for coupon.json",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returns a URL for coupon.json', () => {",
+              "  const body = pm.response.json();",
+              "  pm.expect(body.url).to.include('/coupons/coupon.json?');",
+              "  pm.collectionVariables.set('presigned_url', body.url);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/import_presigned_url",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "import_presigned_url"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"filename\": \"coupon.json\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT Upload coupon.json with the presigned URL",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Upload accepted by S3 (200)', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{presigned_url}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"coupon_id\": \"319326de971100158f6fa0daeec978fba1f17e4b\",\n  \"title\": \"Save 20% on Fairmont hotels\",\n  \"description\": \"Save 20% on Fairmont hotels when you book your stay through December 2022\",\n  \"coupon_code\": \"SAVE20\",\n  \"campaign_id\": \"CHRISTMAS2022\",\n  \"provider_id\": \"FAIRMONT\",\n  \"provider_name\": \"Fairmont Hotels and Resorts\",\n  \"start_date\": \"1669852800\",\n  \"end_date\": \"1672444800\"\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Import presigned URL - bad filename returns 400",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:4566/restapis/{{api_id}}/dev/_user_request_/coupons/import_presigned_url",
+          "host": [
+            "localhost"
+          ],
+          "port": "4566",
+          "path": [
+            "restapis",
+            "{{api_id}}",
+            "dev",
+            "_user_request_",
+            "coupons",
+            "import_presigned_url"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"filename\": \"../other-folder/coupon.json\"\n}"
+        }
+      },
+      "response": []
     }
   ]
 }
